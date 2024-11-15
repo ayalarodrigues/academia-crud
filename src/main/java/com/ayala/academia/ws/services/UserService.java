@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
 import com.ayala.academia.ws.domain.User;
+import com.ayala.academia.ws.dto.UserDTO;
 import com.ayala.academia.ws.repository.UserRepository;
 import com.ayala.academia.ws.services.exception.ObjectNotFoundException;
 
@@ -25,6 +25,21 @@ public class UserService {
         Optional<User> user = userRepository.findById(id);
         return user.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado!"));
     }
+	
+	 public User create(User user){
+	        return userRepository.save(user);
+	    }
+
+	  public User fromDTO (UserDTO userDTO) {
+		  
+	      return new User(userDTO);
+	    }
+	  
+	  public User update(User user) {
+	        Optional<User> updateUser = userRepository.findById(user.getId());
+	        return updateUser.map(u -> userRepository.save(new User(u.getId(), user.getFirstName(), user.getLastName(), user.getEmail())))
+	                .orElseThrow(() -> new ObjectNotFoundException("Usuário não encontrado!"));
+	    }
 	
 
 }

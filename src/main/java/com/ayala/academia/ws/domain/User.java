@@ -6,6 +6,8 @@ import java.util.Objects;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.ayala.academia.ws.dto.UserDTO;
+
 @Document // Nome da coleção no MongoDB
 public class User implements Serializable{
 	
@@ -22,10 +24,24 @@ public class User implements Serializable{
 
 
 	public User(String firstName, String lastName, String email) {
-		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
+	}
+	
+	public User(String id, String firstName, String lastName, String email) {
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+	}
+	
+	public User(UserDTO userDTO) {
+		this.id = userDTO.getId();
+		this.firstName = userDTO.getFirstName();
+		this.lastName = userDTO.getLastName();
+		this.email = userDTO.getEmail();
+		
 	}
 
 
