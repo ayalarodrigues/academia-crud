@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.ayala.academia.ws.domain.Role;
 import com.ayala.academia.ws.domain.User;
 import com.ayala.academia.ws.dto.UserDTO;
 import com.ayala.academia.ws.services.UserService;
@@ -59,6 +61,14 @@ public class UserResource {
 	public ResponseEntity<Void> delete(@PathVariable String id){
 		userService.delete(id);
 		return ResponseEntity.noContent().build();
+	}
+	
+	@GetMapping("/users/{id}/roles")
+	public ResponseEntity<List<Role>> findRoles(@PathVariable String id){
+			User user = userService.findById(id);
+			
+			return ResponseEntity.ok().body(user.getRoles());
+		
 	}
 
 
