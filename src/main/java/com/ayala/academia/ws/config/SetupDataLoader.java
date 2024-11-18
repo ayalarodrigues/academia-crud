@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.ayala.academia.ws.domain.Role;
 import com.ayala.academia.ws.domain.User;
@@ -21,6 +22,9 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 	
 	@Autowired
 	RoleRepository roleRepository;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
@@ -37,8 +41,12 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 		User joao = new User ("João", "Souza", "joaosilva@example");
 		
 		joao.setRoles(Arrays.asList(roleAdmin));
-		jose.setRoles(Arrays.asList(roleUser));
+		joao.setPassword(passwordEncoder.encode("123"));
+        joao.setEnabled(true);
 		
+        jose.setRoles(Arrays.asList(roleUser));
+        jose.setPassword(passwordEncoder.encode("123"));
+        jose.setEnabled(true);
 		createUserIfNotFound(jose);
 		createUserIfNotFound(joao);
 	}
