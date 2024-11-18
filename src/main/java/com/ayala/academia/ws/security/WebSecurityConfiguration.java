@@ -1,5 +1,6 @@
 package com.ayala.academia.ws.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,7 +16,9 @@ import com.ayala.academia.ws.services.CustomUserDetailsService;
 @EnableWebSecurity
 public class WebSecurityConfiguration {
 	
+	@Autowired
 	CustomUserDetailsService userDetailsService;	
+	
 	@Bean //todas as classes são escaneadas 
 	public BCryptPasswordEncoder bCryptPasswordEncoder() { //criptografa a senha dos usuários
 		return new BCryptPasswordEncoder();
