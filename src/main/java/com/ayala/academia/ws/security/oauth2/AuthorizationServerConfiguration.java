@@ -20,48 +20,44 @@ import com.ayala.academia.ws.services.CustomUserDetailsService;
 @Configuration
 @EnableAuthorizationServer
 public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
-	
-	private TokenStore tokenStore = new InMemoryTokenStore();
-	private String cliente = "cliente";
-	private String clienteSecret = "123";
-	private static final String RESOURCE_ID ="restService";
-	
-	@Autowired
-	@Qualifier("authenticationManagerBean")
-	private AuthenticationManager authenticationManager;
-	
-	@Autowired
-	private CustomUserDetailsService userDetailsService;
-	
-	@Override
-	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception{
-		endpoints.tokenStore(this.tokenStore)
-				.authenticationManager(this.authenticationManager)
-				.userDetailsService(this.userDetailsService);
-	}
-	
-	@Override //pode criar diferentes tipos de clientes
-	public void configure(ClientDetailsServiceConfigurer clients ) throws Exception{
-		clients.inMemory()
-			.withClient(this.cliente)
-			.secret(new BCryptPasswordEncoder().encode(this.clienteSecret))
-			.authorizedGrantTypes("password", "authorization_code", "refresh_token")
-			.scopes("bar", "read", "write")
-			.resourceIds(this.RESOURCE_ID)
-			.accessTokenValiditySeconds(60)
-			.refreshTokenValiditySeconds(60*60*24);
-	}
-	
-	@Bean
-	@Primary
-	public DefaultTokenServices tokenServices() {
-		DefaultTokenServices tokenServices = new DefaultTokenServices();
-		tokenServices.setSupportRefreshToken(true);
-		tokenServices.setAccessTokenValiditySeconds(0);
-		tokenServices.setTokenStore(this.tokenStore);
-		return tokenServices;
-	}
 
+    private TokenStore tokenStore = new InMemoryTokenStore();
+    private String cliente = "cliente";
+    private String clientSecret = "123";
+    private static final String RESOURCE_ID = "restservice";
+    @Autowired
+    @Qualifier("authenticationManagerBean")
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private CustomUserDetailsService userDetailsService;
+
+    @Override
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception{
+        endpoints.tokenStore(this.tokenStore)
+                .authenticationManager(this.authenticationManager)
+                .userDetailsService(this.userDetailsService);
+    }
+    @Override
+    public void configure(ClientDetailsServiceConfigurer clients ) throws Exception{
+        clients.inMemory()
+                .withClient(this.cliente)
+                .secret(new BCryptPasswordEncoder().encode(this.clientSecret))
+                .authorizedGrantTypes("password", "authorization_code", "refresh_token")
+                .scopes("bar", "read", "write")
+                .resourceIds(this.RESOURCE_ID)
+                .accessTokenValiditySeconds(60)
+                .refreshTokenValiditySeconds(60*60*24);
+    }
+
+    @Bean
+    @Primary
+    public DefaultTokenServices tokenServices() {
+        DefaultTokenServices tokenServices = new DefaultTokenServices();
+        tokenServices.setSupportRefreshToken(true);
+        tokenServices.setAccessTokenValiditySeconds(0);
+        tokenServices.setTokenStore(this.tokenStore);
+        return tokenServices;
+    }
 
 
 }

@@ -10,29 +10,28 @@ import org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHand
 
 @Configuration
 @EnableResourceServer
-public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter{
-	
-	private static final String RESOURCE_ID = "restservice";
-	
-	
-	@Override
-	public void configure(ResourceServerSecurityConfigurer resources) {
-		resources.resourceId(this.RESOURCE_ID);
-	}
-	
-	@Override //o que vai estar disponível apenas por autenticação do usuário e o que ficará público
-	public void configure(HttpSecurity http) throws Exception {
-		http.
-				logout().logoutSuccessUrl("/").permitAll()
-				.invalidateHttpSession(true)
-				.clearAuthentication(true)
-				.and().authorizeRequests()
-				.requestMatchers("/api/users/**").hasAnyRole("ADMIN", "USER")
+public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
+
+    private static final String RESOURCE_ID = "restservice";
+
+    @Override
+    public void configure(ResourceServerSecurityConfigurer resources) {
+        resources.resourceId(this.RESOURCE_ID);
+    }
+
+    @Override
+    public void configure(HttpSecurity http) throws Exception {
+        http.
+                logout().logoutSuccessUrl("/").permitAll()
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
+                .and().authorizeRequests()
+                .antMatchers("/api/users/**").hasAnyRole("ADMIN", "USER")
                 .anyRequest().denyAll()
                 .and()
                 .exceptionHandling()
                 .accessDeniedHandler(new OAuth2AccessDeniedHandler());
-		
-	}
+    }
+
 
 }

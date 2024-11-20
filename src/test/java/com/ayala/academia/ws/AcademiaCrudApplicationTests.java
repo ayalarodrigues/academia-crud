@@ -1,13 +1,13 @@
 package com.ayala.academia.ws;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class AcademiaCrudApplicationTests {
+public class AcademiaCrudApplicationTests {
 
 	@Test
-	void contextLoads() {
+	public void contextLoads() {
 	}
 
 }

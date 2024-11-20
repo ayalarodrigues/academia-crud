@@ -11,18 +11,20 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
 import com.ayala.academia.ws.domain.Role;
 import com.ayala.academia.ws.domain.User;
 import com.ayala.academia.ws.repository.UserRepository;
 import com.ayala.academia.ws.services.exception.ObjectNotFoundException;
 
-public class CustomUserDetailsService implements UserDetailsService{
-	
-	@Autowired
-	UserRepository  userRepository;
-	
-	@Override
+@Service
+public class CustomUserDetailsService implements UserDetailsService {
+
+        @Autowired
+        UserRepository userRepository;
+
+    @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findByEmail(email);
         if (!user.isPresent()) {
@@ -32,21 +34,20 @@ public class CustomUserDetailsService implements UserDetailsService{
         }
         return new UserRepositoryUserDetails(user.get());
     }
-	
-	private final List<GrantedAuthority> getGrantedAuthorities(final Collection<Role> roles) {
-		final List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>(); //lista de roles
-		for(Role role: roles) {
-			authorities.add(new SimpleGrantedAuthority(role.getName()));
-		}
-		return authorities;
-	}
-	
-	public final Collection<? extends GrantedAuthority> getAuthorities(final Collection<Role> roles){
-		return getGrantedAuthorities(roles); //retorna a lista de roles de determinado usuário
-	}
 
-	
-	private final static class UserRepositoryUserDetails extends User implements UserDetails {
+    private final List<GrantedAuthority> getGrantedAuthorities(final Collection<Role> roles) {
+        final List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+        for (Role role: roles) {
+            authorities.add(new SimpleGrantedAuthority(role.getName()));
+        }
+        return authorities;
+    }
+
+        public final Collection<? extends GrantedAuthority> getAuthorities(final Collection<Role> roles){
+            return getGrantedAuthorities(roles);
+        }
+
+        private final static class UserRepositoryUserDetails extends User implements UserDetails {
 
         public UserRepositoryUserDetails(User user) {
             super(user);
@@ -84,3 +85,4 @@ public class CustomUserDetailsService implements UserDetailsService{
     }
 
 }
+

@@ -8,7 +8,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import com.ayala.academia.ws.services.exception.ObjectNotFoundException;
 
-import jakarta.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler  extends ResponseEntityExceptionHandler {
@@ -22,4 +22,3 @@ public class RestResponseEntityExceptionHandler  extends ResponseEntityException
     }
 
 }
-
